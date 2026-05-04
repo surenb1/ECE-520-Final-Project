@@ -1,0 +1,80 @@
+#include "xgpio.h"
+#include "xil_printf.h"
+#include "xparameters.h"
+#include "xil_types.h"
+
+// AXI GPIO device IDs from xparameters.h
+#define GPIO_SAMPLES_ID  XPAR_AXI_GPIO_SAMPLES_DEVICE_ID
+#define GPIO_STATUS_ID   XPAR_AXI_GPIO_STATUS_DEVICE_ID
+
+// Status bit positions in status_out[2:0] = {error, done, sample_valid}
+#define BIT_SAMPLE_VALID  0
+#define BIT_DONE          1
+#define BIT_ERROR         2
+
+#define TOTAL_SAMPLES     1280
+
+int main() {
+    XGpio gpio_samples;
+    XGpio gpio_status;
+    int status;
+    u32 status_val;
+    u32 sample;
+    s16 signed_sample;
+    int i;
+
+    xil_printf("\r\n=== Signal Detection System ===\r\n");
+
+    // Initialize AXI GPIO for samples
+    status = XGpio_Initialize(&gpio_samples, GPIO_SAMPLES_ID);
+    if (status != XST_SUCCESS) {
+        xil_printf("ERROR: Failed to initialize GPIO samples\r\n");
+        return -1;
+    }
+
+    // Initialize AXI GPIO for status
+    status = XGpio_Initialize(&gpio_status, GPIO_STATUS_ID);
+    if (status != XST_SUCCESS) {
+        xil_printf("ERROR: Failed to initialize GPIO status\r\n");
+        return -1;
+    }
+
+    // Set both GPIOs as inputs
+    XGpio_SetDataDirection(&gpio_samples, 1, 0xFFFFFFFF);
+    XGpio_SetDataDirection(&gpio_status, 1, 0xFFFFFFFF);
+
+    xil_printf("Waiting for capture to complete...\r\n");
+    xil_printf("Flip exactly ONE switch to begin.\r\n\r\n");
+
+    // Wait for done flag
+    do {
+        status_val = XGpio_DiscreteRead(&gpio_status, 1);
+
+        // Check error flag
+        if ((status_val >> BIT_ERROR) & 1) {
+            xil_printf("ERROR: Multiple switches ON. Please use only ONE switch at a time.\r\n");
+            // Wait until error clears
+            while ((XGpio_DiscreteRead(&gpio_status, 1) >> BIT_ERROR) & 1);
+            xil_printf("Error cleared. Flip exactly ONE switch.\r\n");
+        }
+    } while (!((status_val >> BIT_DONE) & 1));
+
+    xil_printf("Capture complete! Reading %d samples...\r\n\r\n", TOTAL_SAMPLES);
+
+    // Wait for sample_valid and read each sample
+    int count = 0;
+    while (count < TOTAL_SAMPLES) {
+        status_val = XGpio_DiscreteRead(&gpio_status, 1);
+        if ((status_val >> BIT_SAMPLE_VALID) & 1) {
+            sample = XGpio_DiscreteRead(&gpio_samples, 1) & 0xFFFF;
+            signed_sample = (s16)sample;
+
+            // Print as decimal for Python to read
+            xil_printf("%d\r\n", (int)signed_sample);
+            count++;
+        }
+    }
+
+    xil_printf("\r\n=== Transfer Complete ===\r\n");
+    return 0;
+}

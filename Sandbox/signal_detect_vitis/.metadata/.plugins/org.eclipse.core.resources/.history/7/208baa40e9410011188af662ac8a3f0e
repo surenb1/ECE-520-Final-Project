@@ -1,0 +1,33 @@
+#include "xgpio.h"
+#include "xil_printf.h"
+#include "xparameters.h"
+#include "xil_types.h"
+
+#define GPIO_SAMPLES_ID  XPAR_AXI_GPIO_SAMPLES_DEVICE_ID
+#define GPIO_STATUS_ID   XPAR_AXI_GPIO_STATUS_DEVICE_ID
+
+int main() {
+    XGpio gpio_samples;
+    XGpio gpio_status;
+    u32 status_val;
+    u32 last_status = 99;
+
+    xil_printf("\r\n=== Debug Mode ===\r\n");
+
+    XGpio_Initialize(&gpio_samples, GPIO_SAMPLES_ID);
+    XGpio_Initialize(&gpio_status, GPIO_STATUS_ID);
+    XGpio_SetDataDirection(&gpio_samples, 1, 0xFFFFFFFF);
+    XGpio_SetDataDirection(&gpio_status, 1, 0xFFFFFFFF);
+
+    xil_printf("Monitoring status register...\r\n");
+
+    while(1) {
+        status_val = XGpio_DiscreteRead(&gpio_status, 1);
+        if (status_val != last_status) {
+            xil_printf("status changed: %d\r\n", (int)status_val);
+            last_status = status_val;
+        }
+    }
+
+    return 0;
+}

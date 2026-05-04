@@ -1,0 +1,41 @@
+#include "xgpio.h"
+#include "xil_printf.h"
+#include "xparameters.h"
+#include "xil_types.h"
+
+#define GPIO_SAMPLES_ID  XPAR_AXI_GPIO_SAMPLES_DEVICE_ID
+#define GPIO_STATUS_ID   XPAR_AXI_GPIO_STATUS_DEVICE_ID
+
+int main() {
+    XGpio gpio_samples;
+    XGpio gpio_status;
+    int status;
+    u32 status_val;
+
+    xil_printf("\r\n=== Debug Mode ===\r\n");
+
+    status = XGpio_Initialize(&gpio_samples, GPIO_SAMPLES_ID);
+    if (status != XST_SUCCESS) {
+        xil_printf("ERROR: Failed to initialize GPIO samples\r\n");
+        return -1;
+    }
+
+    status = XGpio_Initialize(&gpio_status, GPIO_STATUS_ID);
+    if (status != XST_SUCCESS) {
+        xil_printf("ERROR: Failed to initialize GPIO status\r\n");
+        return -1;
+    }
+
+    XGpio_SetDataDirection(&gpio_samples, 1, 0xFFFFFFFF);
+    XGpio_SetDataDirection(&gpio_status, 1, 0xFFFFFFFF);
+
+    xil_printf("Reading status GPIO continuously...\r\n");
+
+    while(1) {
+        status_val = XGpio_DiscreteRead(&gpio_status, 1);
+        xil_printf("status: %d\r\n", (int)status_val);
+        for(volatile int d = 0; d < 1000000; d++);
+    }
+
+    return 0;
+}
