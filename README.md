@@ -72,5 +72,5 @@ The following are the plots resulting from the successful capture of sampled dat
 https://youtube.com/shorts/OH825yi2Q50
 
 ## Contributors
-Suren Bursalyan
-Leo Issa Ghoulian
+- Suren Bursalyan
+- Leo Issa Ghoulian
