@@ -1,13 +1,13 @@
-# ECE-520-Final-Project
-This repository is made for the ECE 520 (SoC Design) final project. It describes and demonstrates our Real-Time Signal Detection system.
-
-# Real-Time Sine Wave Detection System — Zybo Z7-10
+# Real-Time Sine Wave Detection System
 
 A hardware-software co-design project implementing a real-time sine wave generation and capture system on the Zybo Z7-10 development board using the Zynq SoC architecture.
 
 ## Overview
 
 Four sine waves of varying frequencies and amplitudes are stored in block RAM (BRAM) on the programmable logic (PL) and selectively output based on user switch input. Captured samples are transferred to the ARM processing system (PS) via two AXI GPIO interfaces, streamed over UART to a PC, and plotted using a Python script.
+
+## Functional Block Diagram
+<img width="1212" height="789" alt="Final Block Diagram" src="https://github.com/user-attachments/assets/c6e83f1e-0835-4b65-af12-10dcade28900" />
 
 ## Sine Wave Specifications
 
@@ -22,36 +22,6 @@ Four sine waves of varying frequencies and amplitudes are stored in block RAM (B
 - 1,280 total samples per capture (5 cycles)
 - 16-bit signed integer sample format
 - 1,000 samples per second output rate
-
-## System Architecture
-
-Switches -> switch_decoder -> sample_controller <- BRAM
-                                    |
-                          axi_gpio_samples / axi_gpio_status
-                                    |
-                            AXI Interconnect
-                                    |
-                            Zynq PS (ARM)
-                                    |
-                             UART / USB
-                                    |
-                           Python Script (PC)
-
-## Project Structure
-
-vivado/
-├── sine_bram.v          # BRAM sine wave lookup tables
-├── switch_decoder.v     # Switch input validator
-├── sample_controller.v  # Sample sequencer
-├── top.v                # Top-level module
-├── tb_top.v             # Testbench
-└── constraints.xdc      # Pin constraints
-
-vitis/
-└── main.c               # ARM PS application
-
-python/
-└── signal_plotter.py    # Data capture and visualization
 
 ## Tools Used
 
@@ -76,6 +46,21 @@ python/
 
 4. Flip exactly one switch (SW0-SW3) on the board to begin capture
 5. The script will collect 1,280 samples, save them to samples.csv, and display the waveform plot
+
+## Results
+The following are the plots resulting from the successful capture of sampled data by the python script. Figure 1 shows the waveform corresponding to SW0 being switched on. Figure 2 shows the waveform corresponding to SW1 being switched on. Figure 3 shows the waveform corresponding to SW2 being switched on. Finally, Figure 4 shows the corresponding waveform to SW3 being switched on.
+
+### Figure 1 - SW0 Signal Plot
+<img width="1200" height="500" alt="TestCase1_SW0_waveform_detected" src="https://github.com/user-attachments/assets/cae2d699-e7d9-4aaa-b912-ab328562c44c" />
+
+### Figure 2 - SW1 Signal Plot
+<img width="1200" height="500" alt="TestCase2_SW1_waveform_detected" src="https://github.com/user-attachments/assets/67ee03b2-1710-441d-83ae-f0e64b13947f" />
+
+### Figure 3 - SW2 Signal Plot
+<img width="1200" height="500" alt="TestCase3_SW2_waveform_detected" src="https://github.com/user-attachments/assets/dde99750-56d9-4183-ac7c-d363c506453e" />
+
+## Figure 4 - SW3 Signal Plot
+<img width="1200" height="500" alt="TestCase4_SW3_waveform_detected" src="https://github.com/user-attachments/assets/1e2c23d0-274f-413a-8383-ffddc00bcc10" />
 
 ## Notes
 
