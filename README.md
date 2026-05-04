@@ -4,7 +4,7 @@ A hardware-software co-design project implementing a real-time sine wave generat
 
 ## Overview
 
-Four sine waves of varying frequencies and amplitudes are stored in block RAM (BRAM) on the programmable logic (PL) and selectively output based on user switch input. Captured samples are transferred to the ARM processing system (PS) via two AXI GPIO interfaces, streamed over UART to a PC, and plotted using a Python script.
+Four sine waves of varying frequencies and amplitudes are stored in block RAM (BRAM) on the programmable logic (PL) and selectively output based on user switch input. Captured samples are transferred to the ARM processing system (PS) via two AXI GPIO interfaces, streamed over UART to a PC, and plotted using a Python script. For details on intended user operation of the system, please refer to the "How to Use" section.
 
 ## Functional Block Diagram
 <img width="1212" height="789" alt="Final Block Diagram" src="https://github.com/user-attachments/assets/c6e83f1e-0835-4b65-af12-10dcade28900" />
