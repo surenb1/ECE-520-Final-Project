@@ -67,3 +67,6 @@ The following are the plots resulting from the successful capture of sampled dat
 - Only one switch may be active at a time
 - Activating multiple switches simultaneously will trigger an error message
 - The system automatically detects and reports multi-switch errors via UART
+
+## Video Demo Link
+https://youtube.com/shorts/OH825yi2Q50
