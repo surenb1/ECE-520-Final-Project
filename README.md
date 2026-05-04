@@ -7,7 +7,7 @@ A hardware-software co-design project implementing a real-time sine wave generat
 
 ## Overview
 
-Four pre-computed sine waves of varying frequencies and amplitudes are stored in block RAM on the programmable logic and selectively output based on user switch input. Captured samples are transferred to the ARM processing system via AXI GPIO interfaces, streamed over UART to a PC, and plotted using a Python script.
+Four sine waves of varying frequencies and amplitudes are stored in block RAM (BRAM) on the programmable logic (PL) and selectively output based on user switch input. Captured samples are transferred to the ARM processing system (PS) via two AXI GPIO interfaces, streamed over UART to a PC, and plotted using a Python script.
 
 ## Sine Wave Specifications
 
