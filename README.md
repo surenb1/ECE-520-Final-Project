@@ -70,3 +70,7 @@ The following are the plots resulting from the successful capture of sampled dat
 
 ## Video Demo Link
 https://youtube.com/shorts/OH825yi2Q50
+
+## Contributors
+Suren Bursalyan
+Leo Issa Ghoulian
